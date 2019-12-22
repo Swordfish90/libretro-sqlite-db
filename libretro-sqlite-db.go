@@ -30,6 +30,10 @@ func main() {
 			system: "gba",
 		},
 		RDBEntry {
+			filename: "libretro-database/rdb/Sony - PlayStation Portable.rdb",
+			system: "snes",
+		},
+		RDBEntry {
 			filename: "libretro-database/rdb/Nintendo - Nintendo 64.rdb",
 			system: "n64",
 		},
