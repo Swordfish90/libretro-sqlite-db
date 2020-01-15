@@ -45,6 +45,22 @@ func main() {
 			filename: "libretro-database/rdb/Nintendo - Super Nintendo Entertainment System.rdb",
 			system: "snes",
 		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Sega - Master System - Mark III.rdb",
+			system: "sms",
+		},
+		RDBEntry {
+			filename: "libretro-database/rdb/FBNeo - Arcade Games.rdb",
+			system: "fbneo",
+		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Sony - PlayStation Portable.rdb",
+			system: "psp",
+		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Nintendo - Nintendo DS.rdb",
+			system: "nds",
+		},
 	}
 
 	database, _ := sql.Open("sqlite3", "./libretro-db.sqlite")
