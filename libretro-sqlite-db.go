@@ -61,17 +61,30 @@ func main() {
 			filename: "libretro-database/rdb/Nintendo - Nintendo DS.rdb",
 			system: "nds",
 		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Sega - Game Gear.rdb",
+			system: "gg",
+		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Atari - 2600.rdb",
+			system: "atari2600",
+		},
+		RDBEntry {
+			filename: "libretro-database/rdb/Sony - PlayStation.rdb",
+			system: "psx",
+		},
 	}
 
 	database, _ := sql.Open("sqlite3", "./libretro-db.sqlite")
 
-	exec(database, "CREATE TABLE IF NOT EXISTS games (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT, system TEXT, romName TEXT, developer TEXT, crc32 TEXT)")
+	exec(database, "CREATE TABLE IF NOT EXISTS games (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT, system TEXT, romName TEXT, developer TEXT, crc32 TEXT, serial TEXT)")
 
 	for _, entry := range entries {
 		loadDatabase(database, entry.filename, entry.system)
 	}
 
 	exec(database, "CREATE INDEX crc32Index ON games (crc32)")
+	exec(database, "CREATE INDEX serialIndex ON games (serial)")
 	exec(database, "CREATE INDEX romNameIndex ON games (romName)")
 }
 
@@ -82,8 +95,8 @@ func loadDatabase(database *sql.DB, filename string, system string) {
 	for i, g := range games {
 		fmt.Println(i, g.Name)
 		crc32 := strings.ToUpper(strconv.FormatInt(int64(g.CRC32), 16))
-		statement, _ := database.Prepare("INSERT INTO games (name, romName, system, developer, crc32) VALUES (?,?,?,?,?)")
-		statement.Exec(g.Name, g.ROMName, system, g.Developer, crc32)
+		statement, _ := database.Prepare("INSERT INTO games (name, romName, system, developer, crc32, serial) VALUES (?,?,?,?,?,?)")
+		statement.Exec(g.Name, g.ROMName, system, g.Developer, crc32, g.Serial)
 	}
 }
 
