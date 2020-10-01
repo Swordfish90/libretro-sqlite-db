@@ -28,7 +28,7 @@ cd RetroArch/libretro-db
 make
 cp ./libretrodb_tool ../..
 
-# If needed, customize the list of entries in libretro-sqlite-db.go
+# If needed, customize the list of entries in libretro-sqlite-db.py
 cd ../..
 python3 libretro-sqlite-db.py
 ```
