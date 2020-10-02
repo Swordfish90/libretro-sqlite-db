@@ -85,6 +85,8 @@ def load_database(connection, filename, system):
         line = line.replace('\\', '\\\\')
         with contextlib.suppress(json.decoder.JSONDecodeError):
             game = json.loads(line)
+            if 'serial' in game:
+                game['serial'] = bytes.fromhex(game['serial'])
             game['system'] = system
             values.append(tuple(game.get(key, '') for key in ['name', 'rom_name', 'system', 'developer', 'crc', 'serial']))
     print(f"{system}: {len(values)} entries")
