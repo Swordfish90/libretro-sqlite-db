@@ -3,7 +3,6 @@ import json
 import sqlite3
 import subprocess
 
-
 def main():
     entries = [
         {
@@ -62,6 +61,10 @@ def main():
             "filename": "libretro-database/rdb/Sony - PlayStation.rdb",
             "system": "psx",
         },
+        {
+            "filename": "libretro-database/rdb/MAME 2003-Plus.rdb",
+            "system": "mame2003plus",
+        },
     ]
 
     connection = sqlite3.connect('./libretro-db.sqlite')
@@ -85,13 +88,24 @@ def load_database(connection, filename, system):
         line = line.replace('\\', '\\\\')
         with contextlib.suppress(json.decoder.JSONDecodeError):
             game = json.loads(line)
+
+            # Some games do not have a name, we just discard them
+            if 'name' not in game or not game['name']:
+                continue
+
+            # Serial needs some manipulation before it can be put into a sqlite database
             if 'serial' in game:
-                game['serial'] = bytes.fromhex(game['serial'])
+                game['serial'] = bytes.fromhex(game['serial']).decode('utf-8')
             game['system'] = system
-            values.append(tuple(game.get(key, '') for key in ['name', 'rom_name', 'system', 'developer', 'crc', 'serial']))
+            values.append(tuple(game.get(key, None) for key in ['name', 'rom_name', 'system', 'developer', 'crc', 'serial']))
+
     print(f"{system}: {len(values)} entries")
     connection.executemany("INSERT INTO games (name, romName, system, developer, crc32, serial) VALUES (?,?,?,?,?,?)", values)
+
+    # Some ROM sets share some files. With this query we remove the duplicates on CRC32 favouring fbneo to mame2003 to mame2000
+    connection.execute('DELETE FROM games WHERE system IN ("fbneo", "mame2003plus", "mame2000") AND id NOT IN (SELECT MIN(id) FROM games GROUP BY crc32)')
 
 
 if __name__ == '__main__':
     main()
+
