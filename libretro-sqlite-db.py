@@ -65,6 +65,38 @@ def main():
             "filename": "libretro-database/rdb/MAME 2003-Plus.rdb",
             "system": "mame2003plus",
         },
+        {
+            "filename": "libretro-database/rdb/NEC - PC Engine - TurboGrafx 16.rdb",
+            "system": "pce",
+        },
+        {
+            "filename": "libretro-database/rdb/Atari - Lynx.rdb",
+            "system": "lynx",
+        },
+        {
+            "filename": "libretro-database/rdb/Atari - 7800.rdb",
+            "system": "atari7800",
+        },
+        {
+            "filename": "libretro-database/rdb/Sega - Mega-CD - Sega CD.rdb",
+            "system": "scd",
+        },
+        {
+            "filename": "libretro-database/rdb/SNK - Neo Geo Pocket.rdb",
+            "system": "ngp",
+        },
+        {
+            "filename": "libretro-database/rdb/SNK - Neo Geo Pocket Color.rdb",
+            "system": "ngc",
+        },
+        {
+            "filename": "libretro-database/rdb/Bandai - WonderSwan.rdb",
+            "system": "ws",
+        },
+        {
+            "filename": "libretro-database/rdb/Bandai - WonderSwan Color.rdb",
+            "system": "wsc",
+        }
     ]
 
     connection = sqlite3.connect('./libretro-db.sqlite')
@@ -72,10 +104,6 @@ def main():
 
     for entry in entries:
         load_database(connection, entry['filename'], entry['system'])
-
-    connection.execute("CREATE INDEX crc32Index ON games (crc32)")
-    connection.execute("CREATE INDEX serialIndex ON games (serial)")
-    connection.execute("CREATE INDEX romNameIndex ON games (romName)")
 
     connection.commit()
     connection.close()
