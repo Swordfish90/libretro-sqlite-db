@@ -96,6 +96,10 @@ def main():
         {
             "filename": "libretro-database/rdb/Bandai - WonderSwan Color.rdb",
             "system": "wsc",
+        },
+        {
+            "filename": "libretro-database/rdb/Nintendo - Nintendo 3DS.rdb",
+            "system": "3ds",
         }
     ]
 
